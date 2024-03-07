@@ -4,8 +4,16 @@
         <servlet-name>LoginController</servlet-name>
         <servlet-class>authentication.LoginController</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>Schedule</servlet-name>
+        <servlet-class>controller.lecturer.Schedule</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>LoginController</servlet-name>
         <url-pattern>/login</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>Schedule</servlet-name>
+        <url-pattern>/schedule</url-pattern>
     </servlet-mapping>
 </web-app>
