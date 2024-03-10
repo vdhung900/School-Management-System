@@ -4,7 +4,7 @@
  */
 package dal;
 
-import entity.Account;
+import entity.Student;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -16,54 +16,54 @@ import java.util.logging.Logger;
  *
  * @author vdhung
  */
-public class AccountDBContext extends DBContext<Account> {
+public class StudentDBContext extends DBContext<Student> {
 
-    public Account getAccount(String username, String password) {
+    public ArrayList<Student> getStudentsByLessonId(int leid) {
+        ArrayList<Student> students = new ArrayList<>();
         try {
-            String sql = "select username,password,displayname\n"
-                    + "from Account\n"
-                    + "where username = ? and password = ?";
-
+            String sql = "SELECT s.sid,s.sname,s.member\n"
+                    + "FROM Student s INNER JOIN Enrollment e ON s.sid = e.sid\n"
+                    + "INNER JOIN StudentGroup g ON g.gid = e.gid\n"
+                    + "INNER JOIN Lesson les ON les.gid = g.gid\n"
+                    + "WHERE les.leid = ?";
             PreparedStatement stm = connection.prepareStatement(sql);
-            stm.setString(1, username);
-            stm.setString(2, password);
+            stm.setInt(1, leid);
             ResultSet rs = stm.executeQuery();
-            if (rs.next()) {
-                Account account = new Account();
-                account.setUsername(username);
-                account.setPassword(password);
-                account.setDisplayname(rs.getString("displayname"));
-                return account;
+            while (rs.next()) {
+                Student s = new Student();
+                s.setId(rs.getInt("sid"));
+                s.setName(rs.getString("sname"));
+                s.setMember(rs.getString("member"));
+                students.add(s);
             }
 
         } catch (SQLException ex) {
-            Logger.getLogger(AccountDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(StudentDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return null;
+        return students;
     }
-
     @Override
-    public ArrayList<Account> list() {
+    public void insert(Student entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void insert(Account entity) {
+    public void update(Student entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void update(Account entity) {
+    public void delete(Student entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void delete(Account entity) {
+    public Student get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Account get(int id) {
+    public ArrayList<Student> list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

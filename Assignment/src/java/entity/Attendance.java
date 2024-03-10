@@ -13,7 +13,7 @@ import java.util.Date;
 public class Attendance {
     private int id;
     private Student student;
-    private Lesson lession;
+    private Lesson lesson;
     private String description;
     private boolean present;
     private Date time;
@@ -34,12 +34,12 @@ public class Attendance {
         this.student = student;
     }
 
-    public Lesson getLession() {
-        return lession;
+    public Lesson getLesson() {
+        return lesson;
     }
 
-    public void setLession(Lesson lession) {
-        this.lession = lession;
+    public void setLesson(Lesson lesson) {
+        this.lesson = lesson;
     }
 
     public String getDescription() {
