@@ -22,7 +22,7 @@ import jakarta.servlet.http.HttpSession;
  * @author vdhung
  */
 public abstract class AuthenticationController extends HttpServlet {
-
+    
     private Account getAuthentication(HttpServletRequest req)
     {
         HttpSession session = req.getSession();
@@ -70,7 +70,7 @@ public abstract class AuthenticationController extends HttpServlet {
         }
         else
         {
-            resp.getWriter().println("access denied!");
+            resp.sendRedirect("login");
         }
     }
     
@@ -87,12 +87,12 @@ public abstract class AuthenticationController extends HttpServlet {
         }
         else
         {
-            resp.getWriter().println("access denied!");
+            resp.sendRedirect("login");
         }
     
     }
     
     protected abstract void doGet(HttpServletRequest req, HttpServletResponse resp,Account account) 
             throws ServletException, IOException;
-
+    
 }
