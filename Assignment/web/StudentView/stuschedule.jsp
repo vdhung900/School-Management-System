@@ -19,16 +19,10 @@
             <div>FPT University Academic Portal</div>
             <div>
                 <a href="../home">Home</a> |
-                <a href="#">View Schedule</a>|
-                <a href="#">List Student</a>
+                <a href="#">View Schedule</a>
             </div>
         </div>
         <div class="container">
-            <form action="schedule" method="GET">
-                <input type="hidden" name="id" value="${param.id}"/>
-                Period: <input type="date" value="${requestScope.from}" name="from"/> - <input value="${requestScope.to}" type="date" name="to"/> 
-                <input type="submit" value="Show"/>
-            </form>
             <p>
                 <b>Note:</b>
                 These activities do not include extra-curriculum activities, such as club activities ...
@@ -49,63 +43,67 @@
                 <thead>
                     <tr>
                         <th rowspan="2">
-                            <span>YEAR</span>
-                            <select name="year">
-                                <option value="">2021</option>
-                                <option value="">2022</option>
-                                <option value="">2023</option>
-                                <option value="" selected="">2024</option>
-                                <option value="">2025</option>
-                            </select>
+                            <form action="schedule" method="GET">
+                                <input type="hidden" value="${requestScope.id}" name="id">
+                                <input type="hidden" value="${sessionScope.week}" name="week">
+                                YEAR
+                                <select name="year" onchange="this.form.submit()">
+                                    <c:forEach items="${sessionScope.years}" var="year">
+                                        <option value="${year}" ${year == sessionScope.year ? 'selected' : ''}>${year}</option>
+                                    </c:forEach>
+                                </select>
+                            </form>
                             </br>
-                            <c:set var="currentweek" value="${requestScope.currentweek}"/>
-                            <form id="weekForm" action="studentschedule" method="GET">
-                                <input type="hidden" id="from" name="from">
-                                <input type="hidden" id="to" name="to">
-                                WEEK <select name="selectedWeek" id="selectedWeek" onchange="sendWeekData()">
-                                    <c:forEach items="${requestScope.formattedWeeks}" var="week">
-                                        <option <c:if test="${currentweek eq week}"> selected="" </c:if>>${week}</option>
+                            <form action="schedule" method="GET">
+                                <input type="hidden" value="${requestScope.id}" name="id">
+                                <input type="hidden" value="${sessionScope.year}" name="year">
+                                WEEK 
+                                <select name="week" onchange="this.form.submit()">
+                                    <c:forEach items="${sessionScope.weeks}" var="week" varStatus="status">
+                                        <option value="${status.index + 1}" ${status.index + 1 == sessionScope.week ? 'selected' : ''}>${week}</option>
                                     </c:forEach>
                                 </select>
                                 </br>
-                                <input type="submit" style="display:none;">
-                            </form>
-                        <th>MON</th>
-                        <th>TUE</th>
-                        <th>WED</th>
-                        <th>THU</th>
-                        <th>FRI</th>
-                        <th>SAT</th>
-                        <th>SUN</th>
+                                <th>MON</th>
+                                <th>TUE</th>
+                                <th>WED</th>
+                                <th>THU</th>
+                                <th>FRI</th>
+                                <th>SAT</th>
+                                <th>SUN</th>
                     </tr>
                     <tr>
-                        <c:forEach items="${requestScope.dates}" var="d">
-                            <td>${d}</td>
-                        </c:forEach>
+                        <c:forEach items="${sessionScope.dayOfWeek}" var="d">
+                            <th>${d}</th>
+                            </c:forEach>
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach items="${requestScope.slots}" var="slot">
+                    <c:forEach items="${sessionScope.slots}" var="slot">
                         <tr>
                             <td>${slot.name}</td>
-                            <c:forEach items="${requestScope.dates}" var="d">
+                            <c:forEach items="${sessionScope.dayOfWeek}" var="d">
                                 <td>
-                                    <c:forEach items="${requestScope.lessons}" var="les">
+                                    <c:forEach items="${sessionScope.lessons}" var="les">
                                         <c:if test="${d eq les.date and les.slot.id eq slot.id}">
                                             <a href="list?id=${les.id}"> 
                                                 ${les.group.name}-${les.group.suid.name}
                                             </a>
                                             <br/>At ${les.room.name} <br/>
-                                            <%
-                                                 LessonDBContext lessDB = new LessonDBContext();
-                                                  boolean check = lessDB.checkAttendance(1, 1);
-                                            %>
-                                            <c:if test="${check}">
-                                                Attended
-                                            </c:if>
-                                            <c:if test="${!check}">
-                                                Absent
-                                            </c:if>     
+                                            <c:forEach items="${sessionScope.atts}" var="att">
+                                                <c:if test="${att.lesson.id eq les.id}">
+                                                    <c:if test="${att.present eq null}">
+                                                        Not yet
+                                                    </c:if>
+                                                    <c:if test="${att.present}">
+                                                        <div style="color: green">(Attended)</div>
+                                                    </c:if>
+                                                    <c:if test="${!att.present}">
+                                                        <div style="color: red">(Absent)</div>
+                                                    </c:if>            
+                                                </c:if>
+                                            </c:forEach>
+                                            <div style="font-size: small">(${les.slot.period})</div>
                                         </c:if>
                                     </c:forEach>
                                 </td>
@@ -117,8 +115,8 @@
             <div class="note">
                 <b>More note / Chú thích thêm: </b></br>
                 <ul>
-                    <li>(<font color="green">attended</font>) : hungvdhe 186864 had attended this activity / Võ Đình Hưng đã tham gia hoạt động này</li>
-                    <li>(<font color="red">absent</font>) : hungvdhe 188884 had NOT attended this activity / Võ Đình Hưng đã vắng mặt buổi này</li>
+                    <li>(<font color="green">attended</font>) : attended this activity / đã tham gia hoạt động này</li>
+                    <li>(<font color="red">absent</font>) : NOT attended this activity / đã vắng mặt buổi này</li>
                     <li>(-) : no data was given / chưa có dữ liệu</li>
                 </ul>
             </div>

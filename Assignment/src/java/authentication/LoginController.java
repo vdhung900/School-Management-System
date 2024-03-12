@@ -65,7 +65,9 @@ public class LoginController extends HttpServlet {
             session.setAttribute("account", account);
             response.sendRedirect("home");
         } else {
-            response.getWriter().println("login failed!");
+            String invalid_statement= "Invalid name or password!!!";
+            request.setAttribute("invalid", invalid_statement);
+            request.getRequestDispatcher("LoginView/login.jsp").forward(request, response);
         }
     }
 

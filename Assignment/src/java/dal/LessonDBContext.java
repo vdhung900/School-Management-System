@@ -14,6 +14,7 @@ import entity.Subject;
 import entity.TimeSlot;
 import java.util.ArrayList;
 import java.sql.*;
+import java.time.LocalDate;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,7 +24,7 @@ import java.util.logging.Logger;
  */
 public class LessonDBContext extends DBContext<Lesson> {
 
-    public ArrayList<Lesson> getLessonByDateLecturer(int lid, Date from, Date to) {
+    public ArrayList<Lesson> getLessonByDateLecturer(int lid, LocalDate from, LocalDate to) {
         ArrayList<Lesson> lessons = new ArrayList<>();
         try {
             String sql = "select ls.leid,ls.date,ls.isAttended,l.lid,l.lname,g.gid,g.gname,r.rid,r.rname,t.tid,t.tname,s.suid,s.suname\n"
@@ -36,8 +37,8 @@ public class LessonDBContext extends DBContext<Lesson> {
                     + "where l.lid = ? and ls.date >= ? and ls.date <= ?";
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setInt(1, lid);
-            stm.setDate(2, from);
-            stm.setDate(3, to);
+            stm.setDate(2, Date.valueOf(from));
+            stm.setDate(3, Date.valueOf(to));
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Lesson le = new Lesson();
@@ -47,7 +48,7 @@ public class LessonDBContext extends DBContext<Lesson> {
                 Room r = new Room();
                 TimeSlot slot = new TimeSlot();
                 le.setId(rs.getInt("leid"));
-                le.setDate(rs.getDate("date"));
+                le.setDate(rs.getDate("date").toLocalDate());
                 le.setAttended(rs.getBoolean("isAttended"));
 
                 g.setId(rs.getInt("gid"));
@@ -81,7 +82,7 @@ public class LessonDBContext extends DBContext<Lesson> {
     public ArrayList<Attendance> getAttendencesByLesson(int leid) {
         ArrayList<Attendance> atts = new ArrayList<>();
         try {
-            String sql = "SELECT s.sid,s.sname,a.aid,a.isPresent,a.description,a.capturetime\n"
+            String sql = "SELECT s.sid,s.sname,s.img,s.member,a.aid,a.isPresent,a.description,a.capturetime\n"
                     + "FROM Student s INNER JOIN Enrollment e ON s.sid = e.sid\n"
                     + "INNER JOIN StudentGroup g ON g.gid = e.gid\n"
                     + "INNER JOIN Lesson les ON les.gid = g.gid\n"
@@ -96,6 +97,8 @@ public class LessonDBContext extends DBContext<Lesson> {
                 Lesson les = new Lesson();
                 s.setId(rs.getInt("sid"));
                 s.setName(rs.getString("sname"));
+                s.setMember(rs.getString("member"));
+                s.setImg(rs.getString("img"));
                 att.setStudent(s);
 
                 les.setId(leid);
@@ -192,10 +195,10 @@ public class LessonDBContext extends DBContext<Lesson> {
         }
     }
 
-    public ArrayList<Lesson> getLessonByDateStudent(int sid, Date from, Date to) {
+    public ArrayList<Lesson> getLessonByDateStudent(int sid, LocalDate from, LocalDate to) {
         ArrayList<Lesson> lessons = new ArrayList<>();
         try {
-            String sql = "select ls.leid,ls.date,ls.isAttended,l.lid,l.lname,g.gid,g.gname,r.rid,r.rname,t.tid,t.tname,su.suid,su.suname,s.sid,s.sname\n"
+            String sql = "select ls.leid,ls.date,ls.isAttended,l.lid,l.lname,g.gid,g.gname,r.rid,r.rname,t.tid,t.tname,t.tperiod,su.suid,su.suname,s.sid,s.sname,s.img,s.member\n"
                     + "from Lesson ls\n"
                     + "inner join Lecturer l on ls.lid = l.lid\n"
                     + "inner join StudentGroup g on ls.gid = g.gid\n"
@@ -207,8 +210,8 @@ public class LessonDBContext extends DBContext<Lesson> {
                     + "where s.sid = ? and ls.date >= ? and ls.date <= ?";
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setInt(1, sid);
-            stm.setDate(2, from);
-            stm.setDate(3, to);
+            stm.setDate(2, Date.valueOf(from));
+            stm.setDate(3, Date.valueOf(to));
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
                 Lesson le = new Lesson();
@@ -219,7 +222,7 @@ public class LessonDBContext extends DBContext<Lesson> {
                 TimeSlot slot = new TimeSlot();
                 Student s = new Student();
                 le.setId(rs.getInt("leid"));
-                le.setDate(rs.getDate("date"));
+                le.setDate(rs.getDate("date").toLocalDate());
                 le.setAttended(rs.getBoolean("isAttended"));
 
                 g.setId(rs.getInt("gid"));
@@ -231,6 +234,7 @@ public class LessonDBContext extends DBContext<Lesson> {
 
                 slot.setId(rs.getInt("tid"));
                 slot.setName(rs.getString("tname"));
+                slot.setPeriod(rs.getString("tperiod"));
                 le.setSlot(slot);
 
                 r.setId(rs.getInt("rid"));
@@ -243,6 +247,8 @@ public class LessonDBContext extends DBContext<Lesson> {
 
                 s.setId(sid);
                 s.setName(rs.getString("sname"));
+                s.setMember(rs.getString("member"));
+                s.setImg(rs.getString("img"));
 
                 lessons.add(le);
 

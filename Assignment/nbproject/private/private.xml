@@ -3,17 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/authentication/LogoutController.java</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/web/LoginView/login.jsp</file>
+            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/web/WEB-INF/web.xml</file>
+            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/dal/LessonDBContext.java</file>
+            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/entity/Lesson.java</file>
             <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/entity/Account.java</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/controller/student/ListStudent.java</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/web/StudentView/liststudent.jsp</file>
+            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/entity/Attendance.java</file>
             <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/controller/student/StudentSchedule.java</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/controller/lecturer/TakeAttendance.java</file>
+            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/web/LecturerView/lecschedule.jsp</file>
             <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/web/StudentView/stuschedule.jsp</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/dal/StudentDBContext.java</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/web/css/LoginStyle.css</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/authentication/LoginController.java</file>
+            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/entity/TimeSlot.java</file>
+            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/dal/AttendanceDBContext.java</file>
         </group>
     </open-files>
 </project-private>

@@ -18,21 +18,26 @@
             <div>FPT University Academic Portal</div>
             <div>
                 <a href="../home">Home</a> |
-                <a href="#">View Schedule</a>
+                <a href="schedule?id=${sessionScope.account.id}">View Schedule</a> |
+                <a href="#">List Student</a>
             </div>
         </div>
         <div class="container">
             <table border="1px">
                 <tr>
-                    <th>No</th>
+                    <th>Index</th>
                     <th>Image</th>
                     <th>Member</th>
                     <th>Name</th>
                 </tr>
-                <c:forEach items="${requestScope.students}" var="s">
+                <c:forEach items="${requestScope.students}" var="s" varStatus="status">
                     <tr>
-                        <td>${s.id}</td>
-                        <td></td>
+                        <td>${status.index+1}</td>
+                        <td>
+                        <center>
+                            <img src="../images/ava/S${s.id}.jpg" style="height:150px;width:150px;border-width:0px;">
+                        </center>
+                        </td>
                         <td>${s.member}</td>
                         <td>${s.name}</td>
                     </tr>

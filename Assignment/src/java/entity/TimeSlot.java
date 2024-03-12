@@ -11,6 +11,16 @@ package entity;
 public class TimeSlot {
     private int id;
     private String name;
+    private String period;
+
+    public String getPeriod() {
+        return period;
+    }
+
+    public void setPeriod(String period) {
+        this.period = period;
+    }
+    
 
     public int getId() {
         return id;

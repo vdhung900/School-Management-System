@@ -5,14 +5,20 @@
 package util;
 
 import java.text.SimpleDateFormat;
+import java.time.DayOfWeek;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.TemporalAdjusters;
+import java.time.temporal.WeekFields;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  *
- * @author sonnt
+ * @author vdhung
  */
 public class DateTimeHelper {
      public static Date getBeginningOfWeek(Date date) {
@@ -56,56 +62,50 @@ public class DateTimeHelper {
         return null;
     }
     
-   public static List<String> getWeeksInYearFormatted(int year) {
-        List<String> formattedWeeks = new ArrayList<>();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
-        Calendar calendar = Calendar.getInstance();
+    public static List<String> getWeeksFromFirstMonday(String y) {
+        int year = Integer.parseInt(y);
+        List<String> weeks = new ArrayList<>();
+        LocalDate firstMondayOfYear = LocalDate.of(year, 1, 1).with(TemporalAdjusters.firstInMonth(DayOfWeek.MONDAY));
+        LocalDate lastDayOfYear = LocalDate.of(year, 12, 31);
 
-        List<Integer> weeks = getWeeksInYear(year);
-        for (Integer week : weeks) {
-            calendar.set(Calendar.YEAR, year);
-            calendar.set(Calendar.WEEK_OF_YEAR, week);
-            calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-            Date startDate = calendar.getTime();
-            calendar.add(Calendar.DAY_OF_MONTH, 6);
-            Date endDate = calendar.getTime();
-            formattedWeeks.add(sdf.format(startDate) + " To " + sdf.format(endDate));
-        }
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM");
 
-        return formattedWeeks;
-    }
+        LocalDate startOfWeek = firstMondayOfYear;
+        LocalDate endOfWeek = startOfWeek.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
 
-    private static List<Integer> getWeeksInYear(int year) {
-        List<Integer> weeks = new ArrayList<>();
-        Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.YEAR, year);
-        calendar.set(Calendar.MONTH, Calendar.JANUARY);
-        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        while (startOfWeek.isBefore(lastDayOfYear) || (startOfWeek.equals(lastDayOfYear) && endOfWeek.getDayOfWeek() != DayOfWeek.MONDAY)) {
 
-        while (calendar.get(Calendar.YEAR) == year) {
-            int week = calendar.get(Calendar.WEEK_OF_YEAR);
-            if (!weeks.contains(week)) {
-                weeks.add(week);
-            }
-            calendar.add(Calendar.DATE, 1);
+            weeks.add(startOfWeek.format(formatter) + " To " + endOfWeek.format(formatter));
+
+            startOfWeek = startOfWeek.plusWeeks(1);
+            endOfWeek = startOfWeek.with(TemporalAdjusters.nextOrSame(DayOfWeek.SUNDAY));
         }
 
         return weeks;
     }
-    
-    public static String getCurrentWeekFormatted() {
-        Calendar calendar = Calendar.getInstance();
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM");
-        
-        // Get the start date of the current week (Monday)
-        calendar.set(Calendar.DAY_OF_WEEK, Calendar.MONDAY);
-        String startDate = sdf.format(calendar.getTime());
-        
-        // Get the end date of the current week (Sunday)
-        calendar.add(Calendar.DAY_OF_MONTH, 6);
-        String endDate = sdf.format(calendar.getTime());
-        
-        // Format the week range
-        return startDate + " To " + endDate;
+
+    public static List<LocalDate> getDaysOfWeek(String y, String w) {
+        int year = Integer.parseInt(y);
+        int weekNumber = Integer.parseInt(w);
+        List<LocalDate> dayOfWeek = new ArrayList<>();
+        LocalDate date = LocalDate.now().withYear(year).with(WeekFields.ISO.weekOfYear(), weekNumber).with(DayOfWeek.MONDAY); // Set to Monday of the given week
+        for (int i = 0; i < 7; i++) {
+            dayOfWeek.add(date); // Format the date before adding to the list
+            date = date.plusDays(1);
+        }
+        return dayOfWeek;
+    }
+
+    public static LocalDate[] getWeek(String y, String w) {
+        int year = Integer.parseInt(y);
+        int weekNumber = Integer.parseInt(w);
+        WeekFields weekFields = WeekFields.of(Locale.getDefault());
+        LocalDate firstDayOfYear = LocalDate.of(year, 1, 1);
+        LocalDate firstDayOfFirstWeek = firstDayOfYear.with(weekFields.weekOfYear(), 1);
+
+        LocalDate startOfWeek = firstDayOfFirstWeek.plusWeeks(weekNumber - 1);
+        LocalDate endOfWeek = startOfWeek.plusDays(6);
+
+        return new LocalDate[]{startOfWeek, endOfWeek};
     }
 }

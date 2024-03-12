@@ -9,9 +9,27 @@ package entity;
  * @author vdhung
  */
 public class Account {
+
     private String username;
     private String password;
     private String displayname;
+    private int roleid, id;
+
+    public int getRoleid() {
+        return roleid;
+    }
+
+    public void setRoleid(int roleid) {
+        this.roleid = roleid;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
     public String getUsername() {
         return username;

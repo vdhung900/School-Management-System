@@ -5,6 +5,7 @@
 package entity;
 
 import java.sql.Date;
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -16,7 +17,7 @@ public class Lesson {
     private Room room;
     private Lecturer lecturer;
     private TimeSlot slot;
-    private Date date;
+    private LocalDate date;
     private boolean attended;
     private StudentGroup group;
     private ArrayList<Attendance> atts = new ArrayList<>();
@@ -53,13 +54,15 @@ public class Lesson {
         this.slot = slot;
     }
 
-    public Date getDate() {
+    public LocalDate getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(LocalDate date) {
         this.date = date;
     }
+
+
 
     public boolean isAttended() {
         return attended;

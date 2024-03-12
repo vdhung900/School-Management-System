@@ -12,6 +12,15 @@ public class Student {
     private int id;
     private String name;
     private String member;
+    private String img;
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
 
     public String getMember() {
         return member;

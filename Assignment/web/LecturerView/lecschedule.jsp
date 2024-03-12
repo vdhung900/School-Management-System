@@ -22,11 +22,6 @@
             </div>
         </div>
         <div class="container">
-            <form action="lecturerschedule" method="GET">
-                <input type="hidden" name="id" value="${param.id}"/>
-                Period: <input type="date" value="${requestScope.from}" name="from"/> - <input value="${requestScope.to}" type="date" name="to"/> 
-                <input type="submit" value="Show"/>
-            </form>
             <p>
                 <b>Note:</b>
                 These activities do not include extra-curriculum activities, such as club activities ...
@@ -47,26 +42,27 @@
                 <thead>
                     <tr>
                         <th rowspan="2">
-                            <span>YEAR</span>
-                            <select name="year">
-                                <option value="">2021</option>
-                                <option value="">2022</option>
-                                <option value="">2023</option>
-                                <option value="" selected="">2024</option>
-                                <option value="">2025</option>
-                            </select>
+                            <form action="schedule" method="GET">
+                                <input type="hidden" value="${requestScope.id}" name="id">
+                                <input type="hidden" value="${sessionScope.week}" name="week">
+                                YEAR
+                                <select name="year" onchange="this.form.submit()">
+                                    <c:forEach items="${sessionScope.years}" var="year">
+                                        <option value="${year}" ${year == sessionScope.year ? 'selected' : ''}>${year}</option>
+                                    </c:forEach>
+                                </select>
+                            </form>
                             </br>
-                            <c:set var="currentweek" value="${requestScope.currentweek}"/>
-                            <form id="weekForm" action="lecturerschedule" method="GET">
-                                <input type="hidden" id="from" name="from">
-                                <input type="hidden" id="to" name="to">
-                                WEEK <select name="selectedWeek" id="selectedWeek" onchange="sendWeekData()">
-                                    <c:forEach items="${requestScope.formattedWeeks}" var="week">
-                                        <option <c:if test="${currentweek eq week}"> selected="" </c:if>>${week}</option>
+                            <form action="schedule" method="GET">
+                                <input type="hidden" value="${requestScope.id}" name="id">
+                                <input type="hidden" value="${sessionScope.year}" name="year">
+                                WEEK 
+                                <select name="week" onchange="this.form.submit()">
+                                    <c:forEach items="${sessionScope.weeks}" var="week" varStatus="status">
+                                        <option value="${status.index + 1}" ${status.index + 1 == sessionScope.week ? 'selected' : ''}>${week}</option>
                                     </c:forEach>
                                 </select>
                                 </br>
-                                <input type="submit" style="display:none;">
                             </form>
                         <th>MON</th>
                         <th>TUE</th>
@@ -76,21 +72,22 @@
                         <th>SAT</th>
                         <th>SUN</th>
                     </tr>
-                    <tr>
-                        <c:forEach items="${requestScope.dates}" var="d">
-                            <td>${d}</td>
-                        </c:forEach>
+                    <tr>              
+                        <c:forEach items="${sessionScope.dayOfWeek}" var="d">
+                            <th>${d}</th>
+                            </c:forEach>
                     </tr>
                 </thead>
                 <tbody>
-                    <c:forEach items="${requestScope.slots}" var="slot">
+                    <c:forEach items="${sessionScope.slots}" var="slot">
                         <tr>
                             <td>${slot.name}</td>
-                            <c:forEach items="${requestScope.dates}" var="d">
+                            <c:forEach items="${sessionScope.dayOfWeek}" var="d">
                                 <td>
-                                    <c:forEach items="${requestScope.lessons}" var="les">
+                                    <c:forEach items="${sessionScope.lessons}" var="les">
                                         <c:if test="${d eq les.date and les.slot.id eq slot.id}">
-                                            ${les.group.name}-${les.group.suid.name} <br/>At ${les.room.name} <br/>
+                                            ${les.group.name}-${les.group.suid.name} <br/>
+                                            At ${les.room.name} <br/>
                                             <a href="takeattendance?id=${les.id}"> 
                                                 <c:if test="${les.attended}">
                                                     Edit
@@ -108,6 +105,7 @@
                 </tbody>
             </table>   
         </div>
+        <br><br>
         <div class="footer">
             Powered by FPT University | CMS | library | books24x7
         </div>
