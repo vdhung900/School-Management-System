@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.sql.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.eclipse.jdt.internal.compiler.lookup.Scope;
 
 /**
  *
@@ -21,62 +22,82 @@ import java.util.logging.Logger;
  */
 public class ScoreDBContext extends DBContext<Score> {
 
-    public ArrayList<Score> getScoreByStudentIDandSubject(int sid, int suid) {
+    public ArrayList<Score> getScores(int sid, int suid) {
         ArrayList<Score> scores = new ArrayList<>();
         try {
-            String sql = "select c.cid,c.cname,p.pid,p.pname,p.weight,sc.scoreid,sc.value,su.suid,su.suname,g.gid,g.gname,s.sid,s.sname,s.member,s.img\n"
-                    + "from Score sc\n"
-                    + "inner join Point p on p.pid = sc.pid\n"
-                    + "inner join Category c on c.cid = p.cid\n"
+            String sql = "select sc.scoreid,sc.value,p.pid,p.pname\n"
+                    + "from Point p\n"
+                    + "inner join Category c on p.cid = c.cid\n"
                     + "inner join Subject su on su.suid = p.suid\n"
-                    + "inner join StudentGroup g on g.gid = sc.gid\n"
-                    + "inner join Enrollment e on e.gid = g.gid\n"
-                    + "inner join Student s on s.sid = e.sid and s.sid = sc.sid\n"
-                    + "where s.sid = ? and su.suid = ?";
+                    + "left join Score sc on sc.pid = p.pid\n"
+                    + "left join Student s on s.sid =sc.sid\n"
+                    + "where su.suid =" + suid + " and s.sid = " + sid;
             PreparedStatement stm = connection.prepareStatement(sql);
-            stm.setInt(1, sid);
-            stm.setInt(2, suid);
+            ResultSet rs = stm.executeQuery();
+            if (rs.next()) {
+                do {
+                    Score sc = new Score();
+                    sc.setId(rs.getInt("scoreid"));
+                    sc.setValue(rs.getDouble("value"));
+
+                    Point p = new Point();
+                    p.setId(rs.getInt("pid"));
+                    p.setName(rs.getString("pname"));
+                    sc.setPoint(p);
+
+                    scores.add(sc);
+                } while (rs.next());
+            } else {
+                scores = null;
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(ScoreDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return scores;
+    }
+
+    public ArrayList<Category> getCategoryByStudentIDandSubject(int sid, int suid) {
+        ArrayList<Category> categories = new ArrayList<>();
+        try {
+            String sql_getcategory = "select c.cid,c.cname,MIN(p.pid) AS pid\n"
+                    + "from Category c\n"
+                    + "inner join Point p on p.cid = c.cid\n"
+                    + "inner join Subject su on su.suid = p.suid\n"
+                    + "where su.suid = "+suid+"\n"
+                    + "GROUP BY c.cid, c.cname\n"
+                    + "order by MIN(p.pid)";
+            PreparedStatement stm = connection.prepareStatement(sql_getcategory);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                Point p = new Point();
                 Category c = new Category();
-                Subject su = new Subject();
-                StudentGroup g = new StudentGroup();
-                Student s = new Student();
-                Score score = new Score();
-
                 c.setId(rs.getInt("cid"));
                 c.setName(rs.getString("cname"));
 
-                su.setId(rs.getInt("suid"));
-                su.setName(rs.getString("suname"));
-
-                p.setId(rs.getInt("pid"));
-                p.setName(rs.getString("pname"));
-                p.setWeight(rs.getDouble("weight"));
-                p.setCategory(c);
-                p.setSubject(su);
-
-                g.setId(rs.getInt("gid"));
-                g.setName(rs.getString("gname"));
-
-                s.setId(rs.getInt("sid"));
-                s.setName(rs.getString("sname"));
-                s.setMember(rs.getString("member"));
-
-                score.setId(rs.getInt("scoreid"));
-                score.setValue(rs.getDouble("value"));
-                score.setGroup(g);
-                score.setPoint(p);
-                score.setStudent(s);
-                
-                scores.add(score);
+                ArrayList<Point> points = new ArrayList<>();
+                String sql_getpoint = "select p.pid,p.pname,p.weight\n"
+                        + "from Point p\n"
+                        + "inner join Category c on p.cid = c.cid\n"
+                        + "left join Subject su on su.suid = p.suid\n"
+                        + "where su.suid = " + suid + " and c.cid = " + c.getId();
+                PreparedStatement stm_getpoint = connection.prepareStatement(sql_getpoint);
+                ResultSet rs_getpoint = stm_getpoint.executeQuery();
+                while (rs_getpoint.next()) {
+                    Point p = new Point();
+                    p.setId(rs_getpoint.getInt("pid"));
+                    p.setName(rs_getpoint.getString("pname"));
+                    String formattedValue = String.format("%.2f", rs_getpoint.getDouble("weight"));
+                    formattedValue = formattedValue.replace(",", ".");
+                    double result = Double.parseDouble(formattedValue);
+                    p.setWeight(result);
+                    points.add(p);
+                }
+                c.setPoints(points);
+                categories.add(c);
             }
         } catch (SQLException ex) {
             Logger.getLogger(TimeSlotDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-
-        return scores;
+        return categories;
     }
 
     @Override

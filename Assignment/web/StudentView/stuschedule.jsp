@@ -11,7 +11,7 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>Lecturer Schedule</title>
+        <title>Student Schedule</title>
         <link rel="stylesheet" href="../css/theme.css">
     </head>
     <body>

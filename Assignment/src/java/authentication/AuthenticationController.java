@@ -8,9 +8,7 @@ package authentication;
 import dal.AccountDBContext;
 import entity.Account;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
@@ -70,7 +68,11 @@ public abstract class AuthenticationController extends HttpServlet {
         }
         else
         {
-            resp.sendRedirect("login");
+            if(req.getServletPath().equals("/home")){
+                resp.sendRedirect("login");
+            }else{
+                resp.sendRedirect("../login");
+            }
         }
     }
     
@@ -87,7 +89,11 @@ public abstract class AuthenticationController extends HttpServlet {
         }
         else
         {
-            resp.sendRedirect("login");
+            if(req.getServletPath().equals("/home")){
+                resp.sendRedirect("login");
+            }else{
+                resp.sendRedirect("../login");
+            }
         }
     
     }

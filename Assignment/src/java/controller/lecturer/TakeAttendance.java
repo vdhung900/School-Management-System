@@ -4,20 +4,16 @@
  */
 package controller.lecturer;
 
-import authentication.AuthenticationController;
 import authentication.AuthorizationController;
 import dal.LessonDBContext;
 import dal.StudentDBContext;
 import entity.Account;
 import entity.Attendance;
-import entity.Feature;
 import entity.Lesson;
+import entity.Role;
 import entity.Student;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -29,7 +25,7 @@ import java.util.ArrayList;
 public class TakeAttendance extends AuthorizationController {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp, Account account, ArrayList<Feature> features) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp, Account account, ArrayList<Role> roles) throws ServletException, IOException {
         int leid = Integer.parseInt(req.getParameter("id"));
         StudentDBContext db = new StudentDBContext();
         ArrayList<Student> students = db.getStudentsByLessonId(leid);
@@ -51,7 +47,7 @@ public class TakeAttendance extends AuthorizationController {
     }
 
     @Override
-    protected void doGet(HttpServletRequest req, HttpServletResponse resp, Account account, ArrayList<Feature> features) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp, Account account, ArrayList<Role> roles) throws ServletException, IOException {
         int leid = Integer.parseInt(req.getParameter("id"));
         LessonDBContext lesDB = new LessonDBContext();
         ArrayList<Attendance> atts = lesDB.getAttendencesByLesson(leid);

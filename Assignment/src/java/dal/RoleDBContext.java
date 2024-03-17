@@ -4,8 +4,7 @@
  */
 package dal;
 
-import entity.Feature;
-import java.lang.reflect.Array;
+import entity.Role;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -17,15 +16,17 @@ import java.util.logging.Logger;
  *
  * @author vdhung
  */
-public class FeatureDBContext extends DBContext<Feature> {
+public class RoleDBContext extends DBContext<Role> {
 
-    public ArrayList<Feature> getByUsernameAndUrl(String username, String url) {
-        ArrayList<Feature> features = new ArrayList<>();
+    public ArrayList<Role> getRoleByUrlAndUsername(String username, String url) {
+        ArrayList<Role> roles = new ArrayList<>();
         try {
-            String sql = "select f.fid,f.fname,f.url \n"
-                    + "from Account a \n"
-                    + "inner join Account_Feature af on a.roleid = af.roleid\n"
-                    + "inner join Feature f on f.fid = af.fid\n"
+            String sql = "select r.roleid,r.rolename\n"
+                    + "from Account a\n"
+                    + "inner join Role_Account ra on ra.username = a.username\n"
+                    + "inner join Role r on r.roleid = ra.roleid\n"
+                    + "inner join Role_Feature rf on rf.roleid = r.roleid\n"
+                    + "inner join Feature f on f.fid = rf.fid\n"
                     + "where a.username = ? and f.url = ?";
 
             PreparedStatement stm = connection.prepareStatement(sql);
@@ -33,41 +34,40 @@ public class FeatureDBContext extends DBContext<Feature> {
             stm.setString(2, url);
             ResultSet rs = stm.executeQuery();
             while (rs.next()) {
-                Feature f = new Feature();
-                f.setId(rs.getInt("fid"));
-                f.setName(rs.getString("fname"));
-                f.setUrl(url);
-
-                features.add(f);
+                Role r = new Role();
+                r.setId(rs.getInt("roleid"));
+                r.setName(rs.getString("rolename"));
+                roles.add(r);
             }
+
         } catch (SQLException ex) {
-            Logger.getLogger(FeatureDBContext.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(RoleDBContext.class.getName()).log(Level.SEVERE, null, ex);
         }
-        return features;
+        return roles;
     }
 
     @Override
-    public ArrayList<Feature> list() {
+    public ArrayList<Role> list() {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void insert(Feature entity) {
+    public void insert(Role entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void update(Feature entity) {
+    public void update(Role entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public void delete(Feature entity) {
+    public void delete(Role entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 
     @Override
-    public Feature get(int id) {
+    public Role get(int id) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
     }
 

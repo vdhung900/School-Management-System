@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author vdhung
@@ -11,9 +13,18 @@ package entity;
 public class Point {
     private int id;
     private String name;
-    private Subject subject;
     private double weight;
+    private Subject subject;
     private Category category;
+    private Score score;
+
+    public Score getScore() {
+        return score;
+    }
+
+    public void setScore(Score score) {
+        this.score = score;
+    }
 
     public int getId() {
         return id;

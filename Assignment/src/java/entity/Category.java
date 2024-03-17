@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author vdhung
@@ -11,6 +13,15 @@ package entity;
 public class Category {
     private int id;
     private String name;
+    ArrayList<Point> points = new ArrayList<>();
+
+    public ArrayList<Point> getPoints() {
+        return points;
+    }
+
+    public void setPoints(ArrayList<Point> points) {
+        this.points = points;
+    }
 
     public int getId() {
         return id;

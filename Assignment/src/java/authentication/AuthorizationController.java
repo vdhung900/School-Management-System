@@ -4,9 +4,9 @@
  */
 package authentication;
 
-import dal.FeatureDBContext;
+import dal.RoleDBContext;
 import entity.Account;
-import entity.Feature;
+import entity.Role;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -19,37 +19,35 @@ import java.util.ArrayList;
  */
 public abstract class AuthorizationController extends AuthenticationController {
 
-    private ArrayList<Feature> getFeatures(Account account, HttpServletRequest req) {
-        FeatureDBContext db = new FeatureDBContext();
+    private ArrayList<Role> getRoles(Account account, HttpServletRequest req) {
+        RoleDBContext db = new RoleDBContext();
         String url = req.getServletPath();
-        System.out.println("sonnt:" + url);
-        return db.getByUsernameAndUrl(account.getUsername(), url);
+        return db.getRoleByUrlAndUsername(account.getUsername(), url);
     }
 
-    protected abstract void doPost(HttpServletRequest req, HttpServletResponse resp, Account account, ArrayList<Feature> features)
+    protected abstract void doPost(HttpServletRequest req, HttpServletResponse resp, Account account, ArrayList<Role> roles)
             throws ServletException, IOException;
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp, Account account) throws ServletException, IOException {
-        ArrayList<Feature> features = getFeatures(account, req);
-        if (features.size() < 1) {
-            resp.getWriter().println("access denied!");
+        ArrayList<Role> roles = getRoles(account, req);
+        if (roles.size() < 1) {
+            resp.sendRedirect("../LoginView/accessdenied.jsp");
         } else {
-            doPost(req, resp, account, features);
+            doPost(req, resp, account, roles);
         }
     }
 
-    protected abstract void doGet(HttpServletRequest req, HttpServletResponse resp, Account account, ArrayList<Feature> features)
+    protected abstract void doGet(HttpServletRequest req, HttpServletResponse resp, Account account, ArrayList<Role> roles)
             throws ServletException, IOException;
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp, Account account) throws ServletException, IOException {
-        ArrayList<Feature> features = getFeatures(account, req);
-        if (features.size() < 1) {
-            resp.getWriter().println("access denied!");
+        ArrayList<Role> roles = getRoles(account, req);
+        if (roles.size() < 1) {
+            resp.sendRedirect("../LoginView/accessdenied.jsp");
         } else {
-            doGet(req, resp, account, features);
+            doGet(req, resp, account, roles);
         }
     }
-
 }

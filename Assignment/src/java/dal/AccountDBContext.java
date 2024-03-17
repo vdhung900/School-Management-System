@@ -5,6 +5,7 @@
 package dal;
 
 import entity.Account;
+import entity.Role;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -20,9 +21,11 @@ public class AccountDBContext extends DBContext<Account> {
 
     public Account getAccount(String username, String password) {
         try {
-            String sql = "select username,password,displayname,roleid,id\n"
-                    + "from Account\n"
-                    + "where username = ? and password = ?";
+            String sql = "select a.username,a.password,a.displayname,a.id,r.roleid,r.rolename\n"
+                    + "from Account a\n"
+                    + "inner join Role_Account ra on ra.username = a.username\n"
+                    + "inner join Role r on r.roleid = ra.roleid\n"
+                    + "where a.username = ? and password = ?";
 
             PreparedStatement stm = connection.prepareStatement(sql);
             stm.setString(1, username);
@@ -30,11 +33,15 @@ public class AccountDBContext extends DBContext<Account> {
             ResultSet rs = stm.executeQuery();
             if (rs.next()) {
                 Account account = new Account();
+                Role role = new Role();
                 account.setUsername(username);
                 account.setPassword(password);
                 account.setDisplayname(rs.getString("displayname"));
-                account.setRoleid(rs.getInt("roleid"));
                 account.setId(rs.getInt("id"));
+                
+                role.setId(rs.getInt("roleid"));
+                role.setName(rs.getString("rolename"));
+                account.setRole(role);
                 return account;
             }
 

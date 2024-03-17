@@ -25,19 +25,22 @@
                 <div class="nav-button"><i class="fas fa-home"></i><span onclick="window.location.href = 'home'">Home</span></div>
                 <hr/>
                 <div class="nav-button"><i class="fas fa-calendar-alt"></i>
-                    <c:if test="${sessionScope.account.roleid eq 1}">
+                    <c:if test="${sessionScope.account.role.id eq 2}">
                         <span onclick="window.location.href = 'lecturer/schedule?id=${sessionScope.account.id}'">Schedule</span>
                     </c:if>
-                    <c:if test="${sessionScope.account.roleid eq 2}">
+                    <c:if test="${sessionScope.account.role.id eq 1}">
                         <span onclick="window.location.href = 'student/schedule?id=${sessionScope.account.id}'">Schedule</span>
                     </c:if>
                 </div>
-                <hr/>
-                <div class="nav-button"><i class="fas fa-pen"></i><span onclick="">Attendance</span></div>
-                <c:if test="${sessionScope.account.roleid eq 2}">
+                <c:if test="${sessionScope.account.role.id eq 2}">
+                    <hr/>
+                    <div class="nav-button"><i class="fas fa-pen"></i> <span onclick="">Give Score</span> </div>
+                </c:if>
+
+                <c:if test="${sessionScope.account.role.id eq 1}">
                     <hr/>
                     <div class="nav-button"><i class="fas fa-graduation-cap"></i><span onclick="window.location.href = 'student/score'">View Score</span></div>
-                </c:if>
+                        </c:if>
                 <div id="nav-content-highlight"></div>
             </div>
             <input id="nav-footer-toggle" type="checkbox"/>
@@ -46,8 +49,8 @@
                     <div id="nav-footer-avatar"><img src="images/fpt.jpg"/></div>
                     <div id="nav-footer-titlebox"><a id="nav-footer-title">${sessionScope.account.displayname}</a>
                         <span id="nav-footer-subtitle">
-                            <c:if test="${sessionScope.account.roleid eq 1}">Lecturer</c:if>
-                            <c:if test="${sessionScope.account.roleid eq 2}">Student</c:if>
+                            <c:if test="${sessionScope.account.role.id eq 2}">Lecturer</c:if>
+                            <c:if test="${sessionScope.account.role.id eq 1}">Student</c:if>
                         </span>
                     </div>
                     <label for="nav-footer-toggle"><i class="fas fa-caret-up"></i></label>

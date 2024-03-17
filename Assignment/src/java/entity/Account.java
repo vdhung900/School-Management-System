@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author vdhung
@@ -13,14 +15,15 @@ public class Account {
     private String username;
     private String password;
     private String displayname;
-    private int roleid, id;
+    private int id;
+    private Role role;
 
-    public int getRoleid() {
-        return roleid;
+    public Role getRole() {
+        return role;
     }
 
-    public void setRoleid(int roleid) {
-        this.roleid = roleid;
+    public void setRole(Role role) {
+        this.role = role;
     }
 
     public int getId() {

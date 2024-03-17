@@ -4,17 +4,17 @@
  */
 package controller.student;
 
-import authentication.AuthenticationController;
 import authentication.AuthorizationController;
 import dal.ScoreDBContext;
+import dal.SubjectDBContext;
 import entity.Account;
-import entity.Feature;
+import entity.Category;
+import entity.Point;
+import entity.Role;
 import entity.Score;
+import entity.Subject;
 import java.io.IOException;
-import java.io.PrintWriter;
 import jakarta.servlet.ServletException;
-import jakarta.servlet.annotation.WebServlet;
-import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
@@ -26,15 +26,28 @@ import java.util.ArrayList;
 public class ScoreReport extends AuthorizationController {
 
     @Override
-    protected void doPost(HttpServletRequest req, HttpServletResponse resp, Account account, ArrayList<Feature> features) throws ServletException, IOException {
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp, Account account, ArrayList<Role> roles) throws ServletException, IOException {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Feature> features) throws ServletException, IOException {
+    protected void doGet(HttpServletRequest request, HttpServletResponse response, Account account, ArrayList<Role> roles) throws ServletException, IOException {
+        int suid = 1;
+        if(request.getParameter("suid") != null){
+            suid = Integer.parseInt(request.getParameter("suid"));
+        }
         ScoreDBContext db = new ScoreDBContext();
-        ArrayList<Score> scores = db.getScoreByStudentIDandSubject(1, 1);
+        ArrayList<Category> categories = db.getCategoryByStudentIDandSubject(account.getId(), suid);
+        request.setAttribute("categories", categories);
+        
+        ArrayList<Score> scores = db.getScores(account.getId(), suid);
         request.setAttribute("scores", scores);
+        
+        SubjectDBContext subDB = new SubjectDBContext();
+        ArrayList<Subject> subjects = subDB.getSubjectByStudentID(account.getId());
+        request.setAttribute("subjects", subjects);
+        
         request.getRequestDispatcher("../StudentView/score.jsp").forward(request, response);
     }
+
 
 }

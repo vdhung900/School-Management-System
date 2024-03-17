@@ -18,9 +18,9 @@
             height: 40px;
             border-radius: 10px;
             background-color: chartreuse;
-            margin-top: 20px;
+            margin-top: 10px;
             margin-bottom: 20px;
-            margin-left: 1340px;
+            margin-left: 1200px;
         }
     </style>
     </head>
@@ -48,7 +48,6 @@
                     </tr>
                     <c:forEach items="${requestScope.atts}" var="a" varStatus="status">
                         <tr>
-
                             <td>${status.index+1}</td>
                             <td>${a.student.member}</td>
                             <td>${a.student.name}</td>

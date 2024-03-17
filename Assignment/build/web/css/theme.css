@@ -14,7 +14,7 @@ body {
 
 .header {
     font-size: medium;
-    background-color: #333;
+    background-color: #18283b;
     color: white;
     padding: 10px 20px;
     display: flex;
@@ -29,7 +29,7 @@ body {
 .container {
     font-size: small;
     padding: 20px;
-    margin: 10px 45px;
+    margin: 40px 45px;
     max-width: 1800px;
 }
 
@@ -47,12 +47,12 @@ td {
 }
 
 th {
-    background-color: #f2f2f2;
+    background-color: #adadad;
 }
 
 .footer {
     font-size: medium;
-    background-color: #333;
+    background-color: #18283b;
     color: white;
     padding: 10px 20px;
     text-align: center;
