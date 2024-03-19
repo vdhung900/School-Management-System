@@ -13,16 +13,26 @@
         <title>Give Score</title>
         <link rel="stylesheet" href="../css/theme.css">
         <style>
-            input[type="submit"] {
-                width: 130px;
-                height: 40px;
-                border-radius: 10px;
-                background-color: chartreuse;
-                margin-top: 10px;
+            select#groupSelection {
+                border: 4px solid #AAA;
+                font-size: inherit;
                 margin-bottom: 20px;
-                margin-left: 1200px;
+                padding: 5px 0px;
+                width: 180px;
+                font-weight: bold;
+                font-size: large;
             }
         </style>
+        <script>
+            function SelectClass() {
+                var select = document.getElementById("groupSelection");
+                var selectedValue = select.options[select.selectedIndex].value;
+                var splitValues = selectedValue.split(",");
+                var suid = splitValues[0];
+                var gid = splitValues[1];
+                window.location.href = "givescore?suid=" + suid + "&gid=" + gid;
+            }
+        </script>
     </head>
     <body>
         <div class="header">
@@ -33,9 +43,14 @@
             </div>
         </div>
         <div class="container">
-            <c:forEach items="${requestScope.groups}" var="g">
-                <a style="font-size: large;" href="givescore?suid=${g.suid.id}&gid=${g.id}">${g.suid.name}-${g.name}</a><br>
-            </c:forEach>
+            <select id="groupSelection" onchange="SelectClass()">
+                <option value="">Select a class</option>
+                <c:forEach items="${requestScope.groups}" var="g">
+                    <option value="${g.suid.id},${g.id}" <c:if test="${(param.suid eq g.suid.id) and (param.gid eq g.id)}"> selected="selected"</c:if>>
+                        ${g.suid.name} - ${g.name}
+                    </option>
+                </c:forEach>
+            </select>
             <form action="givescore" method="POST">
                 <input type="hidden" name="suid" value="${param.suid}"/>
                 <input type="hidden" name="gid" value="${param.gid}"/>
@@ -69,7 +84,9 @@
                         </tr>
                     </c:forEach>
                 </table>
-                <input type="submit" value="Save"/>
+                <c:if test="${!(requestScope.points eq null)}">
+                    <input id="Save" type="submit" value="Save"/>
+                </c:if>
             </form>
 
         </div>

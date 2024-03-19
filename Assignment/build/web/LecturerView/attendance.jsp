@@ -12,17 +12,6 @@
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Take Attendance</title>
         <link rel="stylesheet" href="../css/theme.css">
-        <style>
-        input[type="submit"] {
-            width: 130px;
-            height: 40px;
-            border-radius: 10px;
-            background-color: chartreuse;
-            margin-top: 10px;
-            margin-bottom: 20px;
-            margin-left: 1200px;
-        }
-    </style>
     </head>
     <body>
         <div class="header">
@@ -71,7 +60,7 @@
                         </tr>   
                     </c:forEach>
                 </table>
-                <input type="submit" value="Save"/>
+                <input id="Save" type="submit" value="Save"/>
             </form>
         </div>
         <div class="footer">
