@@ -34,7 +34,7 @@
                 </div>
                 <c:if test="${sessionScope.account.role.id eq 2}">
                     <hr/>
-                    <div class="nav-button"><i class="fas fa-pen"></i> <span onclick="">Give Score</span> </div>
+                    <div class="nav-button"><i class="fas fa-pen"></i> <span onclick="window.location.href = 'lecturer/givescore'">Give Score</span> </div>
                 </c:if>
 
                 <c:if test="${sessionScope.account.role.id eq 1}">

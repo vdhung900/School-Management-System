@@ -4,6 +4,8 @@
  */
 package entity;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author vdhung
@@ -13,6 +15,15 @@ public class Student {
     private String name;
     private String member;
     private String img;
+    private ArrayList<Score> scores;
+
+    public ArrayList<Score> getScores() {
+        return scores;
+    }
+
+    public void setScores(ArrayList<Score> scores) {
+        this.scores = scores;
+    }
 
     public String getImg() {
         return img;

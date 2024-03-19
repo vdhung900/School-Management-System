@@ -77,7 +77,10 @@
                     <tr>
                         <td>Total</td>
                         <td><fmt:formatNumber value="${totalweight * 100}" type="number" pattern="#0.0#" />%</td>
-                        <td>${totalvalue}</td>
+                        <td>
+                            <c:if test="${!(totalvalue eq '')}">${totalvalue/c.points.size()}</c:if>
+                        </td>
+                        <c:set var="totalvalue" value="${totalvalue/c.points.size()}"></c:set>
                         <c:set var="average" value="${average + (totalweight*totalvalue)}"></c:set>
                         </tr>
                         </tr>
@@ -85,11 +88,13 @@
                 <tr style="font-size: large">
                     <td rowspan="2"><b>COURSE<br>TOTAL</b></td>
                     <td><b>AVERAGE</b></td>
+                <c:if test="${countpoint eq countscore}">
                     <td colspan="2"  style="text-align: center;"><b><fmt:formatNumber value="${average}" type="number" pattern="#.##" /></b></td>
+                </c:if>
                 <tr style="font-size: large">
                     <td><b>STATUS</b></td>
                     <c:if test="${countpoint eq countscore}">
-                        <c:if test="${average > 4}"><td colspan="2" style="color: green;text-align: center;"><b>PASSED</b></td></c:if>
+                        <c:if test="${average >= 4}"><td colspan="2" style="color: green;text-align: center;"><b>PASSED</b></td></c:if>
                         <c:if test="${average < 4}"><td colspan="2" style="color: red;text-align: center;"><b>NOT PASSED</b></td></c:if>
                     </c:if>
                     <c:if test="${!(countpoint eq countscore)}">

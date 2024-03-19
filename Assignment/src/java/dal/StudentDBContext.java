@@ -18,6 +18,30 @@ import java.util.logging.Logger;
  */
 public class StudentDBContext extends DBContext<Student> {
 
+    public ArrayList<Student> getStudentsByGroupID(int gid) {
+        ArrayList<Student> students = new ArrayList<>();
+        try {
+            String sql = "select s.sid,s.sname,s.member\n"
+                    + "from StudentGroup g\n"
+                    + "inner join Enrollment e on e.gid = g.gid\n"
+                    + "inner join Student s on s.sid = e.sid\n"
+                    + "where g.gid = "+gid;
+            PreparedStatement stm = connection.prepareStatement(sql);
+            ResultSet rs = stm.executeQuery();
+            while (rs.next()) {
+                Student s = new Student();
+                s.setId(rs.getInt("sid"));
+                s.setName(rs.getString("sname"));
+                s.setMember(rs.getString("member"));
+                students.add(s);
+            }
+
+        } catch (SQLException ex) {
+            Logger.getLogger(StudentDBContext.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return students;
+    }
+
     public ArrayList<Student> getStudentsByLessonId(int leid) {
         ArrayList<Student> students = new ArrayList<>();
         try {
@@ -42,6 +66,7 @@ public class StudentDBContext extends DBContext<Student> {
         }
         return students;
     }
+
     @Override
     public void insert(Student entity) {
         throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
