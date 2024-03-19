@@ -22,6 +22,11 @@
                 font-weight: bold;
                 font-size: large;
             }
+            tr{
+                &:nth-of-type(odd) {
+                    background: #eeeeee;
+                }
+            }
         </style>
         <script>
             function SelectClass() {
@@ -57,12 +62,12 @@
                 <table >
                     <thead>
                         <c:if test="${!(requestScope.points eq null)}">
-                        <td>No</td>
-                        <td>Student Name</td>
-                        <td>Member</td>
+                        <th>No</th>
+                        <th>Student Name</th>
+                        <th>Member</th>
                     </c:if>
                     <c:forEach items="${requestScope.points}" var="point">
-                        <td>${point.name}</td>
+                        <th>${point.name}</th>
                     </c:forEach>
                     </thead>
                     <c:forEach items="${requestScope.students}" var="student" varStatus="status">

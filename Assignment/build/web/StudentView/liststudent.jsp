@@ -26,7 +26,7 @@
             <table border="1px">
                 <tr>
                     <th>Index</th>
-                    <th>Image</th>
+                    <th style="text-align: center;">Image</th>
                     <th>Member</th>
                     <th>Name</th>
                 </tr>

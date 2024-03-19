@@ -3,16 +3,7 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/web/WEB-INF/web.xml</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/web/LoginView/home.jsp</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/web/LoginView/accessdenied.jsp</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/controller/lecturer/GiveScore.java</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/controller/student/ScoreReport.java</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/entity/Score.java</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/web/LecturerView/givescore.jsp</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/dal/StudentDBContext.java</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/web/LecturerView/lecschedule.jsp</file>
-            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/dal/AttendanceDBContext.java</file>
+            <file>file:/C:/Users/vodin/Documents/GitHub/MyAssignment/Assignment/src/java/authentication/HomeController.java</file>
         </group>
     </open-files>
 </project-private>
