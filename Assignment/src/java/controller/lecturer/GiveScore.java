@@ -64,9 +64,6 @@ public class GiveScore extends AuthorizationController {
         
         scDB.deleteScore(gid);
         for (Student student : students) {
-            for (Score score : student.getScores()) {
-                System.out.println(score.getValue());
-            }
             scDB.insertScore(student.getId(), gid, student.getScores());
         }
 
